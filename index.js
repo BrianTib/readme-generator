@@ -9,20 +9,23 @@ function writeReadMeFile(answers) {
     // This will contain the contents of the markdown file
     let markdownContent = '';
 
+    console.log(answers);
+
     // Add the README markdown blocks
     Object.keys(answers).forEach((key) => {
+        // Check if we are adding the title block
+        const isTitle = (key === MARKDOWN_SECTIONS.TITLE);
+
         // Add the markdown block to the rest of the markdown body
         markdownContent += generateMarkdownBlock({
             // The heading level is predetermined
-            headingLevel: markdownContent[key].headingLevel,
+            headingLevel: markdownStructure[key].headingLevel,
             // Determine the title of the markdown block
             // The title itself is customizable. All of the other
             // properties should be fixed
-            title: key === MARKDOWN_SECTIONS.TITLE
-                ? answers[key]
-                : markdownContent[key].title,
+            title: isTitle ? answers[key] : markdownStructure[key].title,
             // The content is just the answer from the user
-            content: answers[key]
+            content: isTitle ? null : answers[key]
         })
     });
 
