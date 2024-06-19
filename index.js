@@ -13,6 +13,9 @@ function writeReadMeFile(answers) {
 
     // Add the README markdown blocks
     Object.keys(answers).forEach((key) => {
+        // Skip empty values
+        if (!answers[key]) { return; }
+
         // Check if we are adding the title block
         const isTitle = (key === MARKDOWN_SECTIONS.TITLE);
 
@@ -30,7 +33,7 @@ function writeReadMeFile(answers) {
     });
 
     // Once we're done, create the file
-    writeFileSync('README.md', markdownContent.trim());
+    writeFileSync('EXAMPLE-README.md', markdownContent.trim());
 }
 
 // TODO: Create a function to initialize app
@@ -46,7 +49,7 @@ function init() {
             if (error.isTtyError) {
                 // Prompt couldn't be rendered in the current environment
                 console.log("The prompt could not be rendered on the current environment");
-              } else {
+            } else {
                 // Something else went wrong
             }
         });

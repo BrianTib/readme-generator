@@ -1,3 +1,6 @@
+import { readFileSync } from 'fs';
+export const licenses = JSON.parse(readFileSync('./utils/LICENSES.json', 'utf-8'));
+
 // Enumerators for the sections of the generated markdown
 export const MARKDOWN_SECTIONS = {
     TITLE: 'TITLE',
@@ -50,8 +53,12 @@ export const markdownStructure = {
         headingLevel: 2,
         title: 'License',
         prompt: {
-            type: 'string',
-            message: "What is your project's license?",
+            type: 'list',
+            message: "Chose a license",
+            choices: [
+                { name: 'None', value: null },
+                ...Object.keys(licenses).map(key => ({ name: key, value: key }))
+            ]
         }
     },
     [MARKDOWN_SECTIONS.CONTRIBUTING]: {
