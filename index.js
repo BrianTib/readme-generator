@@ -1,59 +1,30 @@
 // TODO: Include packages needed for this application
 import inquirer from 'inquirer';
 import { generateMarkdownBlock } from './utils/markdown-helpers.js';
-import { markdownGeneratorStructure } from './utils/markdown-structure.js';
+import { markdownStructure, MARKDOWN_SECTIONS } from './utils/markdown-structure.js';
 import { writeFileSync } from 'fs';
 
 // TODO: Create a function to write README file
-function writeReadMeFile(data) {
+function writeReadMeFile(answers) {
     // This will contain the contents of the markdown file
     let markdownContent = '';
 
-    console.log(data);
-
-    // Add the title
-    markdownContent += generateMarkdownBlock({
-        title: data.name || '<Your-Project-Title>'
+    // Add the README markdown blocks
+    Object.keys(answers).forEach((key) => {
+        // Add the markdown block to the rest of the markdown body
+        markdownContent += generateMarkdownBlock({
+            // The heading level is predetermined
+            headingLevel: markdownContent[key].headingLevel,
+            // Determine the title of the markdown block
+            // The title itself is customizable. All of the other
+            // properties should be fixed
+            title: key === MARKDOWN_SECTIONS.TITLE
+                ? answers[key]
+                : markdownContent[key].title,
+            // The content is just the answer from the user
+            content: answers[key]
+        })
     });
-
-    if (data.description) {
-        markdownContent += generateMarkdownBlock({
-            headingLevel: 2,
-            title: 'Description',
-            content: data.description
-        });
-    }
-
-    if (data.installationInstruction) {
-        markdownContent += generateMarkdownBlock({
-            headingLevel: 2,
-            title: 'Installation',
-            content: data.installationInstruction
-        });
-    }
-
-    if (data.usage) {
-        markdownContent += generateMarkdownBlock({
-            headingLevel: 2,
-            title: 'Usage',
-            content: data.usage
-        });
-    }
-
-    if (data.usage) {
-        markdownContent += generateMarkdownBlock({
-            headingLevel: 2,
-            title: 'Usage',
-            content: data.usage
-        });
-    }
-    if (data.usage) {
-        markdownContent += generateMarkdownBlock({
-            headingLevel: 2,
-            title: 'Usage',
-            content: data.usage
-        });
-    }
 
     // Once we're done, create the file
     writeFileSync('README.md', markdownContent.trim());
@@ -61,7 +32,11 @@ function writeReadMeFile(data) {
 
 // TODO: Create a function to initialize app
 function init() {
-    inquirer.prompt(markdownQuestions)
+    // Collect the prompt structure
+    const prompts = Object.keys(markdownStructure)
+        .map(key => ({ name: key, ...markdownStructure[key].prompt }));
+
+    inquirer.prompt(prompts)
         .then(writeReadMeFile)
         .catch(error => {
             console.log({error});
