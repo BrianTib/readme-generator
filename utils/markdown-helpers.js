@@ -1,16 +1,12 @@
-// TODO: Create a function that returns a license badge based on which license is passed in
-// If there is no license, return an empty string
-export function renderLicenseBadge(license) {
-    if (!license) { return ''; }
+import { licenses } from "./markdown-structure.js";
+
+export function getBadgeForLicense(license) {
+    return licenses[license]?.badge;
 }
 
-// TODO: Create a function that returns the license link
-// If there is no license, return an empty string
-export function renderLicenseLink(license) {}
-
-// TODO: Create a function that returns the license section of README
-// If there is no license, return an empty string
-export function renderLicenseSection(license) {}
+export function getLinkForLicense(license) {
+    return licenses[license]?.url;
+}
 
 // TODO: Create a function to generate markdown for README
 export function generateMarkdownBlock({ headingLevel = 1, title, content }) {

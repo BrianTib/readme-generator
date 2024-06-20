@@ -21,32 +21,36 @@ export const markdownStructure = {
         // This is later changed by the user-supplied value
         title: 'Title',
         prompt: {
-            type: 'string',
+            type: 'input',
             message: "What is your project title?",
+            default: "<Your Project Title>"
         }
     },
     [MARKDOWN_SECTIONS.DESCRIPTION]: {
         headingLevel: 2,
         title: 'Description',
         prompt: {
-            type: 'string',
+            type: 'input',
             message: "What is your project description?",
+            default: null,
         }
     },
     [MARKDOWN_SECTIONS.INSTALLATION]: {
         headingLevel: 2,
         title: 'Installation',
         prompt: {
-            type: 'string',
+            type: 'input',
             message: "What are your project's installation instructions?",
+            default: null,
         }
     },
     [MARKDOWN_SECTIONS.USAGE]: {
         headingLevel: 2,
         title: 'Usage',
         prompt: {
-            type: 'string',
-            message: "What are your usage purposes?",
+            type: 'input',
+            message: "How can your repo be used?",
+            default: null,
         }
     },
     [MARKDOWN_SECTIONS.LICENSE]: {
@@ -57,6 +61,7 @@ export const markdownStructure = {
             message: "Chose a license",
             choices: [
                 { name: 'None', value: null },
+                // Dynamically add the licenses as choices
                 ...Object.keys(licenses).map(key => ({ name: key, value: key }))
             ]
         }
@@ -65,24 +70,27 @@ export const markdownStructure = {
         headingLevel: 2,
         title: 'Contributing',
         prompt: {
-            type: 'string',
+            type: 'input',
             message: "How can others contribute to your project?",
+            default: null,
         }
     },
     [MARKDOWN_SECTIONS.TESTS]: {
         headingLevel: 2,
         title: 'Tests',
         prompt: {
-            type: 'string',
-            message: "How can the tests be run?",
+            type: 'input',
+            message: "How can should tests for your repo be run?",
+            default: null,
         }
     },
     [MARKDOWN_SECTIONS.QUESTIONS]: {
         headingLevel: 2,
         title: 'Questions',
         prompt: {
-            type: 'string',
+            type: 'input',
             message: "Where can questions be directed?",
+            default: null,
         }
     },
 };

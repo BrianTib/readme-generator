@@ -1,10 +1,8 @@
-// TODO: Include packages needed for this application
 import inquirer from 'inquirer';
-import { generateMarkdownBlock } from './utils/markdown-helpers.js';
+import { generateMarkdownBlock, getBadgeForLicense, getLinkForLicense } from './utils/markdown-helpers.js';
 import { markdownStructure, MARKDOWN_SECTIONS } from './utils/markdown-structure.js';
 import { writeFileSync } from 'fs';
 
-// TODO: Create a function to write README file
 function writeReadMeFile(answers) {
     // This will contain the contents of the markdown file
     let markdownContent = '';
@@ -18,17 +16,35 @@ function writeReadMeFile(answers) {
 
         // Check if we are adding the title block
         const isTitle = (key === MARKDOWN_SECTIONS.TITLE);
+        const isLicense = (key === MARKDOWN_SECTIONS.LICENSE);
+
+        const markdownBlock = {
+            title: markdownStructure[key].title,
+            // The content is just the answer from the user
+            content: answers[key]
+        };
+
+        if (isTitle) {
+            // Determine the title of the markdown block
+            // The title itself is customizable. All of the other
+            // properties should be fixed
+            markdownBlock.title = answers[key];
+            markdownBlock.content = null;
+        } else if (isLicense) {
+            // Get the URL and the badge for this license
+            const licenseBadge = getBadgeForLicense(answers[key]);
+            const licenseURL = getLinkForLicense(answers[key]);
+
+            // Append the badge at the top of the file with some spacing
+            markdownContent = `![License](${licenseBadge})\n\n${markdownContent}`;
+            markdownBlock.content = `This project is covered under the [${answers[key]}](${licenseURL}) license.`
+        }
 
         // Add the markdown block to the rest of the markdown body
         markdownContent += generateMarkdownBlock({
             // The heading level is predetermined
             headingLevel: markdownStructure[key].headingLevel,
-            // Determine the title of the markdown block
-            // The title itself is customizable. All of the other
-            // properties should be fixed
-            title: isTitle ? answers[key] : markdownStructure[key].title,
-            // The content is just the answer from the user
-            content: isTitle ? null : answers[key]
+            ...markdownBlock
         })
     });
 
