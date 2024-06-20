@@ -23,7 +23,7 @@ export const markdownStructure = {
         prompt: {
             type: 'input',
             message: "What is your project title?",
-            default: "<Your Project Title>"
+            default: "My new project"
         }
     },
     [MARKDOWN_SECTIONS.DESCRIPTION]: {
@@ -89,7 +89,7 @@ export const markdownStructure = {
         title: 'Questions',
         prompt: {
             type: 'input',
-            message: "Where can questions be directed?",
+            message: "What is your GitHub username?",
             default: null,
         }
     },
