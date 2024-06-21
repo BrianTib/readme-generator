@@ -5,16 +5,15 @@ import { markdownStructure, MARKDOWN_SECTIONS } from './utils/markdown-structure
 import { writeFileSync } from 'fs';
 
 function writeReadMeFile(answers) {
-    // This will contain the entirety of the markdown file as a string
+    // This will hold the README as a string
     let markdownContent = '';
 
     console.log("Generating README with these options:", answers);
+    const answerProperties = Object.keys(answers).filter(key => answers[key]);
 
     // Add the README markdown blocks
-    Object.keys(answers).forEach((key) => {
-        // Skip empty values
-        if (!answers[key]) { return; }
-
+    const markdownSections = answerProperties.map((key) => {
+        // Default markdownBlock structure
         const markdownBlock = {
             title: markdownStructure[key].title,
             // The content is just the answer from the user
@@ -38,25 +37,42 @@ function writeReadMeFile(answers) {
 
                 if (licenseBadge && licenseURL) {
                     // Append the badge at the top of the file with some spacing
-                    markdownContent = `![License](${licenseBadge})\n\n${markdownContent}`;
+                    markdownContent = `![License](${licenseBadge})\n\n`;
                     markdownBlock.content = `This project is protected under the [${answers[key]}](${licenseURL}) license.`;
                 }
             break;
 
             // For the questions section, add a link to the user's GitHub Profile
             case MARKDOWN_SECTIONS.QUESTIONS:
-                markdownBlock.content = `[${answers[key]}](https://github.com/${answers[key]})`;
+                const [username, email] = answers[key].split(" ");
+
+                // Add the github and email link
+                markdownBlock.content = `For additional questions contact me through [GitHub](https://github.com/${username}) or [via email](mailto:${email})`;
             break;
         }
 
         // Add the markdown block to the rest of the markdown body
-        markdownContent += generateMarkdownBlock({
+        return {
             // The heading level is predetermined
             headingLevel: markdownStructure[key].headingLevel,
             // Append the title and the body of the markdown block
             ...markdownBlock
-        });
+        };
     });
+
+    // Add the table of contents after the title
+    markdownSections.splice(2, 0, {
+        headingLevel: 2,
+        title: 'Table of contents',
+        content: answerProperties.map((sectionName) => `- [${sectionName}](#${sectionName.toLowerCase()})`).join("\n")
+    });
+
+    console.log(markdownSections);
+
+    // Concatenate all of the sections as strings
+    markdownContent += markdownSections.map(generateMarkdownBlock)
+        .join("")
+        .trim();
 
     // Once we're done, create the file
     writeFileSync('EXAMPLE-README.md', markdownContent.trim());

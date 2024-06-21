@@ -89,8 +89,19 @@ export const markdownStructure = {
         title: 'Questions',
         prompt: {
             type: 'input',
-            message: "What is your GitHub username?",
+            message: "What is your GitHub username and email? (Space separated)",
             default: null,
+            // Validate that the user has input their username AND email
+            filter: (input) => {
+                // No input is a valid input. This means the user skips the question
+                if (input.length <= 0) { return ''; }
+
+                // Split the input into the username and email
+                const usernameEmailCombo = input.split(" ");
+                if (!usernameEmailCombo.length !== 2) { return ''; }
+
+                return input;
+            }
         }
     },
 };
