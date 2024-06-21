@@ -97,9 +97,9 @@ export const markdownStructure = {
                 if (input.length <= 0) { return ''; }
 
                 // Split the input into the username and email
-                const usernameEmailCombo = input.split(" ");
-                if (!usernameEmailCombo.length !== 2) { return ''; }
+                if (input.split(" ").length !== 2) { return ''; }
 
+                // The input is value, use it as the answer
                 return input;
             }
         }

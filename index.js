@@ -67,15 +67,13 @@ function writeReadMeFile(answers) {
         content: answerProperties.map((sectionName) => `- [${sectionName}](#${sectionName.toLowerCase()})`).join("\n")
     });
 
-    console.log(markdownSections);
-
     // Concatenate all of the sections as strings
     markdownContent += markdownSections.map(generateMarkdownBlock)
         .join("")
         .trim();
 
     // Once we're done, create the file
-    writeFileSync('EXAMPLE-README.md', markdownContent.trim());
+    writeFileSync('README.md', markdownContent.trim());
 }
 
 // TODO: Create a function to initialize app
